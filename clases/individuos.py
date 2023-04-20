@@ -1,4 +1,5 @@
 
+import math
 class Individuo:
     def __init__(self, cromosomas):
         self.cromosomas=cromosomas
@@ -17,5 +18,5 @@ class Individuo:
     
     def obtenerProbabilidad(self, totalHeuristica,totalPosibles):
         probabilidad= self.obtenerPosibles(totalHeuristica)/totalPosibles
-        self.probabilidad=round(probabilidad,2)*100
+        self.probabilidad=math.floor((round(probabilidad,3)*100))
     

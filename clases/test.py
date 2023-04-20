@@ -1,8 +1,13 @@
+from generador_poblacion import Generar_Poblacion
 from ruleta import Ruleta
+rul= Ruleta()
+gen=Generar_Poblacion()
+gen.generar_poblacion()
+print(gen.obtener_Probabilidad())
 
-rul= Ruleta
-rul.colocarProbabilidades(27.0)
-rul.colocarProbabilidades(23.0)
-rul.colocarProbabilidades(25.0)
-rul.colocarProbabilidades(25.0)
+for individuo in gen.poblacion:
+    rul.colocarProbabilidades(individuo.probabilidad)
+rul.rellenarCeros()
+
 print(rul.arr)
+
