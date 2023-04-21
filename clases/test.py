@@ -1,13 +1,11 @@
-from generador_poblacion import Generar_Poblacion
-from ruleta import Ruleta
-rul= Ruleta()
-gen=Generar_Poblacion()
-gen.generar_poblacion()
-print(gen.obtener_Probabilidad())
+from algoritmo_genetico import Algortimo_Genetico
 
-for individuo in gen.poblacion:
-    rul.colocarProbabilidades(individuo)
-rul.rellenarCeros()
+alg= Algortimo_Genetico()
 
-print(rul.arr)
+p1,aux= alg.tomar_cafe()
+
+print(p1)
+print(aux)
+
+
 
