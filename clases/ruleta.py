@@ -3,13 +3,13 @@ import random
 class Ruleta:
     arr = np.zeros(100)
 
-    def colocarProbabilidades(self,probabilidad):
-        length = round(probabilidad)
+    def colocarProbabilidades(self,individuo):
+        length = round(individuo.probabilidad)
         index = 0
         while index < length:
             posicion = random.randint(0,99)
             if Ruleta.arr[posicion] == 0:
-                Ruleta.arr[posicion] = probabilidad
+                Ruleta.arr[posicion] = individuo
                 index += 1
     
     def rellenarCeros(self):

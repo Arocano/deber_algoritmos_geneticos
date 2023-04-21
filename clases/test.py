@@ -6,7 +6,7 @@ gen.generar_poblacion()
 print(gen.obtener_Probabilidad())
 
 for individuo in gen.poblacion:
-    rul.colocarProbabilidades(individuo.probabilidad)
+    rul.colocarProbabilidades(individuo)
 rul.rellenarCeros()
 
 print(rul.arr)
