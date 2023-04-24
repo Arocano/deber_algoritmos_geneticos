@@ -14,9 +14,13 @@ class Algortimo_Genetico:
         self.unloop=[[0,1,2],[3,4,5],[6,7,8]]
         self.loop5=[[1,2,0],[3,4,5],[6,7,8]]
 
+    #Se obtiene los padres de la poblacion en base a la ruleta de probabilidades de los padres
     def obtenerRuleta(self):
+        #Instancia de la ruleta
         rul= Ruleta()
+        #Instancia de la poblacion 
         gen=Generar_Poblacion()
+        #Si la poblacion esta vacia se genera una poblacion inicial randomica
         if len(self.poblacion) == 0:
             gen.generar_poblacion()
             gen.obtener_Probabilidad()
@@ -24,16 +28,20 @@ class Algortimo_Genetico:
         gen.poblacion=copy.deepcopy(self.poblacion)
         gen.obtener_Probabilidad()
         self.poblacion=copy.deepcopy(gen.poblacion)
+        #Se genera un array de 100 posiciones
         arr= rul.generarArray()
+        #Se colocan los individuos en el array de acuerdo a su probabilidad
         for individuo in self.poblacion:
             arr=rul.colocarProbabilidades(individuo,arr)
         arr=rul.rellenarCeros(arr)
         return arr
-    
+    #Se obtienen los padres de la poblacion en base a la ruleta de probabilidades de los padres
     def obtenerPadres(self):
         rul= Algortimo_Genetico.obtenerRuleta(self)
+        #Se obtienen dos padres randomicos
         padre1= rul[random.randint(0,99)]
         padre2= rul[random.randint(0,99)]
+        #Si los padres son iguales se vuelve a obtener un padre2
         while padre1.cromosomas == padre2.cromosomas:
             padre2= rul[random.randint(0,99)]
             self.padres=[padre1,padre2]
@@ -42,30 +50,37 @@ class Algortimo_Genetico:
         return padre1,padre2
     
     def cruce(self):
+        #Se obtienen los padres
         p1,p2= self.obtenerPadres()
+        #Se transforma los padres en un array de 1 dimension
         p1=[element for row in p1.cromosomas for element in row]
         p2=[element for row in p2.cromosomas for element in row]
+        #Se cruzan los padres
         p1_partido1= p1[:self.crossover]
         p1_partido2= p1[self.crossover:]
         p2_partido1= p2[:self.crossover]
         p2_partido2= p2[self.crossover:]
         hijo1= p1_partido1+p2_partido2
         hijo2= p2_partido1+p1_partido2
+        #Se transforman los arrays en matrices
         hijo1=[hijo1[i:i+3] for i in range(0, len(hijo1), 3)]
         hijo2=[hijo2[i:i+3] for i in range(0, len(hijo2), 3)]
+        #Se arreglan los hijos para no repetir numeros
         hijo1= self.arreglarHijos(hijo1)
         hijo2= self.arreglarHijos(hijo2)
         return hijo1,hijo2
     
     def arreglarHijos(self,hijo):
+        #Se crea un set para guardar los numeros que ya estan en el hijo
         numeros_usados = set()
         
+        #Se comprueba que el hijo sea 3x3
         while len(hijo) < 3:
             hijo.append([0] * len(hijo[0]))
         for row in hijo:
             while len(row) < 3:
                 row.append(0)
-
+       #Se recorre el hijo para verificar que no se repitan los numeros
         for i in range(len(hijo)):
             for j in range(len(hijo)):
                 # comprobar si el número esta repetido
@@ -80,16 +95,27 @@ class Algortimo_Genetico:
                 numeros_usados.add(hijo[i][j])
         return hijo
     
+    #Algoritmo para mutar un hijo
     def mutacion(self):
+        #Obtiene la posicion del hijo que se debe mutar
         self.hijomutante= random.randint(0,1)
+        #Obitiene los hijos del cruce que seran evaluados para su mutación 
         hijos= self.cruce()
+        #Se crea una lista con los hijos que acabamos de obtener
         hijos=[hijos[0],hijos[1]]
+        #Se obtiene la ruleta con la probabilidad de que exita una mutación y se obtiene la probabilidad
         mutar= Ruleta.ruletaMutacion(self)
         mutar= mutar[random.randint(0,99)]
+        #Si la probabilidad es diferente a 0 se muta el hijo en la posicion que se obtuvo al inicio
+        #caso contrario se devuelven los hijos sin mutar
         if mutar !=0:
+            #Se obtine el hijo que se debe mutar
             hijo= hijos[self.hijomutante]
+            #Se obtiene las posibles direcciones en las cuales se puede mutar al cromosoma
             direcciones=self.direccionesPosibles(hijo)
+            #Se obtiene una direccion aleatoria de las posibles
             direccion= random.choice(direcciones)
+            #Se muta el hijo en la direccion que se obtuvo y se devulve la lista actualizada
             hijo=self.mutarCromosoma(hijo,direccion)
             hijos[self.hijomutante]=hijo
             return hijos
