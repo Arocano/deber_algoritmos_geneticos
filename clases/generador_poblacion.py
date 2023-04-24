@@ -1,5 +1,5 @@
 import random
-from individuos import Individuo
+from clases.individuos import Individuo
 class Generar_Poblacion:
     estado_objetivo=[[0,1,2],[3,4,5],[6,7,8]]
     totalHeuristica=0
@@ -12,7 +12,7 @@ class Generar_Poblacion:
         return puzzle
     
     def generar_poblacion(self):
-        for i in range(0,4):
+        for i in range(0,6):
             individuo=Individuo(self.generar_8puzzle())
             self.poblacion.append(individuo)
     
